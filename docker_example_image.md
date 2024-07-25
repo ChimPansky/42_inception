@@ -29,7 +29,7 @@ sudo docker build -t image-name .
 
 run the container:
 ```
-docker run -dp 127.0.0.1:4000:3000 getting-started
+docker run -dp 127.0.0.1:4000:3000 image-name
 ```
 
 -d (--detach) means run the container in the background
@@ -44,3 +44,6 @@ list running docker containers:
 
 list all available docker images:
 ```docker images```
+
+stop a specific docker container (get the container_id from docker ps):
+```docker stop <container_id>```
