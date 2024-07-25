@@ -38,3 +38,9 @@ docker run -dp 127.0.0.1:4000:3000 getting-started
 if we now go to
 http://localhost:4000/
 we should see our test application!
+
+list running docker containers:
+```docker ps```
+
+list all available docker images:
+```docker images```
