@@ -3,8 +3,8 @@
 ## lets say you have an application repository and you want to run it within a container.
 
 ```
-cd /path/to/repository
-touch Dockerfile
+> cd /path/to/repository
+> touch Dockerfile
 ```
 ## add the following contents to Dockerfile:
 ```
@@ -24,13 +24,13 @@ EXPOSE 3000
 
 ## build the image:
 ```
-sudo docker build -t image-name .
+> sudo docker build -t image-name .
 ```
 -t means tag the image with the specified name (like an alias)
 
 ## run the container:
 ```
-docker run -dp 127.0.0.1:4000:3000 image-name
+> docker run -dp 127.0.0.1:4000:3000 image-name
 ```
 
 -d (--detach) means run the container in the background
@@ -41,25 +41,26 @@ http://localhost:4000/
 we should see our test application!
 
 ## list running docker containers:
-```docker ps```
+```> docker ps```
 
 ## list all available docker images:
-```docker images```
+```> docker images```
 
 ## stop a specific docker container (get the container_id from docker ps):
-```docker stop <container_id>```
+```> docker stop <container_id>```
 
 # Add a local docker image to dockerhub:
 
 ## lets say you have the following images:
-```docker images```
+```
+> docker images
 REPOSITORY                TAG       IMAGE ID       CREATED         SIZE
 myapp                     latest    abcdef123456   2 hours ago     500MB
 myusername/myapp          v1        abcdef123456   2 hours ago     500MB
 newapp                    latest    bcdefg234567   1 hours ago     250MB
-
+```
 ## and you want to push newapp to dockerhub...
-```docker tag newapp myusername/newapp:mytag```
+```> docker tag newapp myusername/newapp:mytag```
 (tagname is optional, default is "latest")
 ## now docker images will output:
 ```
@@ -70,6 +71,6 @@ newapp                    latest    bcdefg234567   1 hours ago     250MB
 myusername/newapp         mytag     bcdefg234567   1 hours ago     250MB
 ```
 ## then, login to dockerhub:
-```docker login```
+```> docker login```
 ## push the local image to dockerhub:
-```docker push myusername/newapp:mytag```
+```> docker push myusername/newapp:mytag```
