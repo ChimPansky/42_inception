@@ -70,6 +70,8 @@ myusername/myapp          v1        abcdef123456   2 hours ago     500MB
 newapp                    latest    bcdefg234567   1 hours ago     250MB
 myusername/newapp         mytag     bcdefg234567   1 hours ago     250MB
 ```
+we basically created a "pointer" called myusername/newapp that points to the same image as newapp...
+
 ## then, login to dockerhub:
 ```> docker login```
 ## push the local image to dockerhub:
