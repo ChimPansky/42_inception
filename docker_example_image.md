@@ -49,6 +49,12 @@ we should see our test application!
 ## stop a specific docker container (get the container_id from docker ps):
 ```> docker stop <container_id>```
 
+## remove a specific docker container (get the container_id from docker ps):
+```> docker rm <container_id>```
+
+## remove a specific docker image (get the repository name from docker images):
+```> docker rmi <repository>```
+
 # Add a local docker image to dockerhub:
 
 ## lets say you have the following images:
