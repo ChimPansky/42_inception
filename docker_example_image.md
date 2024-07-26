@@ -15,7 +15,8 @@ WORKDIR /app
 COPY . .
 RUN yarn install --production
 CMD ["node", "src/index.js"]
-EXPOSE 3000```
+EXPOSE 3000
+```
 
 - each line in the Dockerfile is called a directive.
 - yarn is used to install the application's dependencies...
@@ -48,18 +49,19 @@ we should see our test application!
 # stop a specific docker container (get the container_id from docker ps):
 ```docker stop <container_id>```
 
-# add a local docker image to dockerhub:
-lets say you have the following images:
+## Add a local docker image to dockerhub:
+
+# lets say you have the following images:
 ```docker images```
 REPOSITORY                TAG       IMAGE ID       CREATED         SIZE
 myapp                     latest    abcdef123456   2 hours ago     500MB
 myusername/myapp          v1        abcdef123456   2 hours ago     500MB
 newapp                    latest    bcdefg234567   1 hours ago     250MB
 
-and you want to push newapp to dockerhub...
+# and you want to push newapp to dockerhub...
 ```docker tag newapp myusername/newapp:mytag```
 (tagname is optional, default is "latest")
-now docker images will output:
+# now docker images will output:
 ```
 REPOSITORY                TAG       IMAGE ID       CREATED         SIZE
 myapp                     latest    abcdef123456   2 hours ago     500MB
@@ -67,7 +69,7 @@ myusername/myapp          v1        abcdef123456   2 hours ago     500MB
 newapp                    latest    bcdefg234567   1 hours ago     250MB
 myusername/newapp         mytag     bcdefg234567   1 hours ago     250MB
 ```
-then, login to dockerhub...
+# then, login to dockerhub:
 ```docker login```
-now
+# push the local image to dockerhub:
 ```docker push myusername/newapp:mytag```
