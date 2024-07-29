@@ -28,6 +28,9 @@ EXPOSE 3000
 ```
 -t means tag the image with the specified name (like an alias)
 
+## one important thing about images:
+they are immutable. once created it cannot be changed. you can only use an image as a template for another one (using the FROM keyword)
+
 ## run the container:
 ```
 > docker run -dp 127.0.0.1:4000:3000 image-name
