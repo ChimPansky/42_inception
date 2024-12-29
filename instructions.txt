@@ -1,0 +1,21 @@
+to build a docker image use (-t tagname)
+docker build -t <image-tag> <path-to-folder-containing-Dockerfile>
+
+for example
+docker build -t inception-nginx srcs/requirements/nginx/
+
+if an image gets built and removed repeatedly, Docker caches installation steps in order to avoid building everything from scratch (in the build process it says "CACHED..."). to force build from scratch use:
+
+docker build --no-cache -t <image-tag>  <path-to-folder-containing-Dockerfile>
+
+
+list images:
+docker images
+
+remove image
+
+docker rmi <image-name>
+
+docker rmi -f <image-name-or-id>
+eg.: docker
+rmi -f cda28a7896dd
