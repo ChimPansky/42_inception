@@ -19,3 +19,7 @@ docker rmi <image-name>
 docker rmi -f <image-name-or-id>
 eg.: docker
 rmi -f cda28a7896dd
+
+to make nginx content reachable through custom domain:
+- edit /etc/hosts file on host machine, add  127.0.0.1    tkasbari.42.fr
+- edit /etc/nginx/nginx.conf in container, add server   tkasbari.42.fr;

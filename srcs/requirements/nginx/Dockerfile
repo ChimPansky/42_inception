@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # COPY - copies from host to container
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/nginx.template
 
 # Copy ssl certificates to the container
 COPY conf/ssl/inception-nginx-selfsigned.crt /etc/ssl/certs/inception-nginx-selfsigned.crt
@@ -21,9 +21,11 @@ COPY www/html /var/www/html
 
 # EXPOSE - tells docker that the container listens on the specified network ports at runtime. this does not make the ports of the container accessible to the host
 EXPOSE 443
+# to make nginx content reachable through custom domain edit /etc/hosts file on host machine (e.g. 127.0.0.1    tkasbari.42.fr)
 
 # CMD - specifies what command to run at container startup
 # "nginx" - starts the nginx server
 # "-g" - allows passing nginx configuration directives
 # "daemon off;" - runs nginx in the foreground. by default, nginx runs in the background and the container would exit immediately after starting
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
