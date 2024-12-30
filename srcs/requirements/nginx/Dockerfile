@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # COPY - copies from host to container
-COPY conf/nginx.conf /etc/nginx/nginx.template
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # Copy ssl certificates to the container
 COPY conf/ssl/inception-nginx-selfsigned.crt /etc/ssl/certs/inception-nginx-selfsigned.crt
@@ -27,5 +27,5 @@ EXPOSE 443
 # "nginx" - starts the nginx server
 # "-g" - allows passing nginx configuration directives
 # "daemon off;" - runs nginx in the foreground. by default, nginx runs in the background and the container would exit immediately after starting
-ENTRYPOINT ["/entrypoint.sh"]
+# ENTRYPOINT ["./entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

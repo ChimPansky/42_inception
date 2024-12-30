@@ -5,6 +5,7 @@ services:
 
     build: ./requirements/mariadb # where to find the Dockerfile to build the image
     container_name: inception-mariadb # name of the container
+    image: mariadb-image # how the image will be tagged if it hasnt been built yet
     restart: always # ensures automatic restart of container in case it crashes
     environment: #pulls values from .env file (needs to be in same folder as docker-compose.yml)
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -19,6 +20,7 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: inception-nginx
+    image: nginx-image
     restart: always
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
@@ -28,6 +30,22 @@ services:
       - /home/${USER}/data/wordpress_data:/var/www/html
     networks:
       - inception-network
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: inception-wordpress
+    image: wordpress-image
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_files:/var/www/wordpress
+    networks:
+      - inception-network
+
 
 networks:
   inception-network:

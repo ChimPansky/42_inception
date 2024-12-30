@@ -1,14 +1,13 @@
-# this will call docker-compose file
 
 YML_FILE = srcs/docker-compose.yml
-IMG_NGINX = inception-nginx-image
-IMG_FOLDER = srcs/requirements/
-CNT_NGINX = inception-nginx-container
+# IMG_NGINX = inception-nginx-image
+# IMG_FOLDER = srcs/requirements/
+# CNT_NGINX = inception-nginx-container
 
 all: build up
 
 build:
-	docker-compose -f $(YML_FILE) build
+	docker-compose --verbose -f $(YML_FILE) build
 
 up:
 	docker-compose -f $(YML_FILE) up -d
@@ -19,11 +18,10 @@ down:
 restart:
 	docker-compose -f $(YML_FILE) restart
 
-clean: down
-	docker-compose -f $(YML_FILE) rm -f
-	docker volume rm $(docker volume ls -q | grep data) || true
+fclean: down
+	docker-compose -f $(YML_FILE) down --volumes --rmi all
 
-re: clean all
+re: fclean all
 
 # compose-up:
 # 	docker-compose up --build -d
