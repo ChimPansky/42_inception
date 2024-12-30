@@ -1,3 +1,43 @@
+- On 42 sgoinfre drive: Via Oracle VirtualBox install Virtual machine running Debian (i chose Bullseye)
+    - create user tkasbari (pw doesnt matter)
+    - allocate ~30 GB HD
+    - keep dynamic disk size, so that you dont need to format all 30 GB at point of installation
+
+- set the resolution in the vm to same as school monitor (usually 1920x1080) and run vm in fullscreen (ctrl + f)
+
+- add tkasbari to sudo:
+    su -
+    usermod -aG sudo tkasbari
+    reboot
+
+- install zsh, oh-my-zsh, curl, git, google chrome, vim
+
+- log into google account to sync bookmarks
+
+- create an sshkey via ssh-keygen and add it to your github (so you can pull inception repo)
+
+- install vscode, make, docker, docker-compose
+
+- add tkasbari to docker group (so docker can be executed without sudo):
+    sudo usermod -aG docker tkasbari
+    reboot
+
+- start vscode and log into github account to sync extensions
+
+- make domain point to localhost:
+    sudo vim /etc/hosts
+    add 127.0.0.1	tkasbari.42.fr
+
+- create folders for persistent container data:
+    mkdir -p tkasbari/data/mariadb
+    mkdir -p tkasbari/data/wordpress
+
+
+
+
+
+
+
 to build a docker image use (-t tagname)
 docker build -t <image-tag> <path-to-folder-containing-Dockerfile>
 

@@ -13,7 +13,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - /home/${USER}/data/mariadb_data:/var/lib/mysql
+      - /home/${USER}/data/mariadb:/var/lib/mysql
     networks:
       - inception-network
 
@@ -26,12 +26,12 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
       - "443:443"
-    volumes:
-      - /home/${USER}/data/wordpress_data:/var/www/html
     networks:
       - inception-network
 
   wordpress:
+    depends_on:
+      - mariadb
     build: ./requirements/wordpress
     container_name: inception-wordpress
     image: wordpress-image
@@ -42,7 +42,7 @@ services:
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: wordpress
     volumes:
-      - wp_files:/var/www/wordpress
+      - /home/${USER}/data/wordpress:/var/www/wordpress
     networks:
       - inception-network
 
