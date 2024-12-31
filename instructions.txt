@@ -28,9 +28,15 @@
     sudo vim /etc/hosts
     add 127.0.0.1	tkasbari.42.fr
 
-- create folders for persistent container data:
-    mkdir -p tkasbari/data/mariadb
-    mkdir -p tkasbari/data/wordpress
+- create folders for persistent container data (on host machine):
+    mkdir -p /home/tkasbari/data/mariadb
+    mkdir -p /home/tkasbari/data/wordpress
+
+- give wordpress folder the rights to be accessed by nginx and wordpress (both use the www-data user)
+    sudo chown -R www-data:www-data /home/tkasbari/data/wordpress
+    sudo chmod -R 755 /home/tkasbari/data/wordpress
+
+
 
 
 

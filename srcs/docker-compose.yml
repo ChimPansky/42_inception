@@ -6,26 +6,31 @@ services:
     build: ./requirements/mariadb # where to find the Dockerfile to build the image
     container_name: inception-mariadb # name of the container
     image: mariadb-image # how the image will be tagged if it hasnt been built yet
-    restart: always # ensures automatic restart of container in case it crashes
+    restart: 'no' # ensures automatic restart of container in case it crashes
     environment: #pulls values from .env file (needs to be in same folder as docker-compose.yml)
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - /home/${USER}/data/mariadb:/var/lib/mysql
+      - /homes/{USER}/data/mariadb:/var/lib/mysql
     networks:
       - inception-network
 
   nginx:
+    depends_on:
+      - wordpress
     build: ./requirements/nginx
     container_name: inception-nginx
     image: nginx-image
-    restart: always
+    restart: 'no'
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
       - "443:443"
+    # make sure the volume path exists and has the right permissions on the host machine (user www-data)
+    volumes:
+      - /homes/{USER}/data/wordpress:/var/www/wordpress
     networks:
       - inception-network
 
@@ -35,14 +40,17 @@ services:
     build: ./requirements/wordpress
     container_name: inception-wordpress
     image: wordpress-image
-    restart: always
+    restart: 'no'
     environment:
       WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_USER: ${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: wordpress
+    # ports:
+    #   - "9000:9000"
+    # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
-      - /home/${USER}/data/wordpress:/var/www/wordpress
+      - /homes/{USER}/data/wordpress:/var/www/wordpress
     networks:
       - inception-network
 
