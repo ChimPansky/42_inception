@@ -49,7 +49,7 @@ clear-wordpress:
 mariadb-volume:
 	@if [ ! -d ~/data/mariadb ]; then \
 		sudo mkdir -p ~/data/mariadb && \
-		sudo chown -R 999:999 ~/data/mariadb; \
+		sudo chown -R mysql:mysql ~/data/mariadb; \
 	else \
 		echo "mariadb volume already exists"; \
 	fi
