@@ -2,10 +2,15 @@ FROM debian:bullseye
 
 RUN apt update && apt install -y \
     php php-fpm php-mysql php-curl php-mbstring php-xml php-gd php-zip \
-    curl tar mariadb-client && \
+    curl tar mariadb-client iputils-ping && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/www
+
+RUN curl -O https://wordpress.org/latest.tar.gz && \
+		tar -xzf latest.tar.gz && \
+		rm latest.tar.gz && \
+		mv wordpress /var/www/wordpress;
 
 COPY ./conf/php-fpm.conf /etc/php/7.4/fpm/pool.d/www.conf
 

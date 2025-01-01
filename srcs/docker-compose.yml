@@ -13,7 +13,9 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - /homes/{USER}/data/mariadb:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
     networks:
       - inception-network
 
@@ -26,11 +28,11 @@ services:
     restart: 'no'
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
-    ports:
-      - "443:443"
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
-      - /homes/{USER}/data/wordpress:/var/www/wordpress
+      - wordpress_data:/var/www/wordpress
+    ports:
+      - "443:443"
     networks:
       - inception-network
 
@@ -50,10 +52,23 @@ services:
     #   - "9000:9000"
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
-      - /homes/{USER}/data/wordpress:/var/www/wordpress
+      - wordpress_data:/var/www/wordpress
     networks:
       - inception-network
 
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/chimpansky/data/mariadb
+      o: bind
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/chimpansky/data/wordpress
+      o: bind
 
 networks:
   inception-network:

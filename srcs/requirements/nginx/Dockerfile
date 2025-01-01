@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     nginx \
     openssl \
     vim \
+    iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # COPY - copies from host to container

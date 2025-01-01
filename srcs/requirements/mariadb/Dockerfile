@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     mariadb-server \
     mariadb-client \
+    iputils-ping \
     && rm -rf /var/lib/apt/lists/*
 
 # Ensure the /run/mysqld directory exists with correct permissions
