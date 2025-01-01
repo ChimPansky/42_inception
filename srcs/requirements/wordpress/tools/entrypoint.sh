@@ -2,20 +2,21 @@
 echo "Starting Wordpress..."
 
 # Check if WordPress is already installed
-if [ ! -d "/var/www/html/wordpress" ] || [ -z "$(ls -A /var/www/html/wordpress)" ]; then
+if [ ! -d "/var/www/html" ] || [ -z "$(ls -A /var/www/html)" ]; then
     echo "WordPress not found. Downloading..."
     curl -O https://wordpress.org/latest.tar.gz
     tar -xzf latest.tar.gz
     rm latest.tar.gz
-    mv wordpress /var/www/html/wordpress
+    mv wordpress/* /var/www/html
+    rm -r wordpress
 else
     echo "WordPress already exists. Skipping download."
 fi
 
 # Create wp-config.php if it doesn't exist
-if [ ! -f "/var/www/html/wordpress/wp-config.php" ]; then
+if [ ! -f "/var/www/html/wp-config.php" ]; then
     echo "WordPress config not found. Generating wp-config.php..."
-    cat <<EOF > /var/www/html/wordpress/wp-config.php
+    cat <<EOF > /var/www/html/wp-config.php
 <?php
 define('DB_NAME', 'wordpress');
 define('DB_USER', 'wpuser');
@@ -44,9 +45,9 @@ else
 fi
 
 # Perform WP installation if not already installed
-if ! wp core is-installed --path=/var/www/html/wordpress --allow-root; then
+if ! wp core is-installed --path=/var/www/html --allow-root; then
     echo "Installing WordPress..."
-    wp core install --path=/var/www/html/wordpress \
+    wp core install --path=/var/www/html \
         --url="https://${DOMAIN_NAME}" \
         --title="My Inception Site" \
         --admin_user="important_user" \
@@ -58,6 +59,6 @@ else
 fi
 
 # echo "Setting permissions for wordpress..."
-chown -R www-data:www-data /var/www/html/wordpress
+chown -R www-data:www-data /var/www/html
 
 exec "$@" # Important for making the container run as PID 1

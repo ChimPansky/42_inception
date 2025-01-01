@@ -23,8 +23,7 @@ fclean: down
 
 re: fclean all
 
-
-# copies the fresh wordpress to the wordpress volume in subfolder data/wordpress of home directory and grants rights to www-data on it  if it doesnt exist yet; else: echo that it already exists
+# creates a volume for wordpress
 wordpress-volume:
 	@if [ ! -d ~/data/wordpress ]; then \
 		echo "creating wordpress volume on host"; \
