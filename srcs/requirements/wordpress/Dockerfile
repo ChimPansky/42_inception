@@ -5,20 +5,17 @@ RUN apt update && apt install -y \
     curl tar mariadb-client iputils-ping && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/www
+# to automate the installation of WordPress
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
 
-RUN curl -O https://wordpress.org/latest.tar.gz && \
-		tar -xzf latest.tar.gz && \
-		rm latest.tar.gz && \
-		mv wordpress /var/www/wordpress;
+RUN mkdir -p /var/www/html
 
 COPY ./conf/php-fpm.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 # Ensure /run/php exists at runtime
 RUN mkdir -p /run/php && chown -R www-data:www-data /run/php
-
-# Ensure WordPress files are owned by www-data during the build
-RUN chown -R www-data:www-data /var/www/
 
 # Expose php-fpm port
 EXPOSE 9000

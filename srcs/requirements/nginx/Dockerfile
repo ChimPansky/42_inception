@@ -17,11 +17,6 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/ssl/inception-nginx-selfsigned.crt /etc/ssl/certs/inception-nginx-selfsigned.crt
 COPY conf/ssl/inception-nginx-selfsigned.key /etc/ssl/private/inception-nginx-selfsigned.key
 
-# copy files for example website - todo: delete
-COPY www/html /var/www/html
-
-# # Ensure WordPress files are owned by www-data during the build
-# RUN chown -R www-data:www-data /var/www/wordpress
 
 
 # EXPOSE - tells docker that the container listens on the specified network ports at runtime. this does not make the ports of the container accessible to the host

@@ -6,7 +6,7 @@ YML_FILE = srcs/docker-compose.yml
 
 all: build up
 
-build:
+build: wordpress-volume mariadb-volume
 	docker-compose --verbose -f $(YML_FILE) build
 
 up:
@@ -23,21 +23,12 @@ fclean: down
 
 re: fclean all
 
-# downloads a fresh copy of wordpress
-wordpress_fresh:
-	@if [ ! -d wordpress_fresh ]; then \
-		curl -O https://wordpress.org/latest.tar.gz && \
-		tar -xzf latest.tar.gz && \
-		rm latest.tar.gz && \
-		mv wordpress wordpress_fresh; \
-	fi
 
 # copies the fresh wordpress to the wordpress volume in subfolder data/wordpress of home directory and grants rights to www-data on it  if it doesnt exist yet; else: echo that it already exists
 wordpress-volume:
 	@if [ ! -d ~/data/wordpress ]; then \
-		make wordpress_fresh; \
-		sudo mkdir -p ~/data/wordpress && \
-		sudo mv wordpress_fresh ~/data/wordpress && \
+		echo "creating wordpress volume on host"; \
+		mkdir -p ~/data/wordpress; \
 		sudo chown -R www-data:www-data ~/data/wordpress; \
 	else \
 		echo "wordpress volume already exists"; \
@@ -48,7 +39,8 @@ clear-wordpress:
 
 mariadb-volume:
 	@if [ ! -d ~/data/mariadb ]; then \
-		sudo mkdir -p ~/data/mariadb && \
+		echo "creating mariadb volume on host"; \
+		mkdir -p ~/data/mariadb; \
 		sudo chown -R mysql:mysql ~/data/mariadb; \
 	else \
 		echo "mariadb volume already exists"; \
