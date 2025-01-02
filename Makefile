@@ -18,8 +18,8 @@ down:
 restart:
 	docker-compose -f $(YML_FILE) restart
 
-fclean: down
-	docker-compose -f $(YML_FILE) down --volumes --rmi all
+fclean: down clear-wordpress clear-mariadb
+	docker-compose -f $(YML_FILE) down --rmi all
 
 re: fclean all
 
