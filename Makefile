@@ -12,15 +12,18 @@ up:
 	docker-compose -f $(YML_FILE) up -d
 
 down:
-	docker-compose -f $(YML_FILE) down
+	docker-compose -f $(YML_FILE) down --timeout 20
 
 restart:
 	docker-compose -f $(YML_FILE) restart
 
-fclean: down clean-volumes
+fclean: down clean-images clean-volumes
 	docker-compose -f $(YML_FILE) down --rmi all
 
 re: fclean all
+
+clean-images:
+	docker-compose -f $(YML_FILE) down --rmi all
 
 # creates a volume for wordpress
 build-volumes: build-wp-volume build-db-volume
@@ -41,7 +44,6 @@ build-db-volume:
 	@if [ ! -d $(DB_VOLUME) ]; then \
 		echo "creating mariadb volume on host"; \
 		mkdir -p $(DB_VOLUME); \
-		sudo chown -R mysql:mysql $(DB_VOLUME); \
 	else \
 		echo "mariadb volume already exists"; \
 	fi

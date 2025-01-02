@@ -2,20 +2,14 @@
 echo "Starting Wordpress..."
 
 # Check if WordPress is already installed
-if [ ! -d "/var/www/html" ] || [ -z "$(ls -A /var/www/html)" ]; then
-    echo "WordPress not found. Downloading..."
+if [ ! -f "/var/www/html/wp-config.php" ]; then
+    echo "WordPress not found. Downloading and moving to /var/www/html..."
     curl -O https://wordpress.org/latest.tar.gz
     tar -xzf latest.tar.gz
     rm latest.tar.gz
     mv wordpress/* /var/www/html
     rm -r wordpress
-else
-    echo "WordPress already exists. Skipping download."
-fi
-
-# Create wp-config.php if it doesn't exist
-if [ ! -f "/var/www/html/wp-config.php" ]; then
-    echo "WordPress config not found. Generating wp-config.php..."
+    echo "Generating wp-config.php..."
     cat <<EOF > /var/www/html/wp-config.php
 <?php
 define('DB_NAME', 'wordpress');
@@ -39,21 +33,31 @@ if ( !defined('ABSPATH') ) {
 }
 require_once(ABSPATH . 'wp-settings.php');
 EOF
-    echo "wp-config.php generated successfully."
+    if [ -f "/var/www/html/wp-config.php" ]; then
+        echo "wp-config.php generated successfully."
+    else
+        echo "Failed to generate wp-config.php."
+        exit 1
+    fi
 else
-    echo "WordPress config already exists. Skipping generation."
+    echo "WordPress already exists. Skipping download."
 fi
 
 # Perform WP installation if not already installed
 if ! wp core is-installed --path=/var/www/html --allow-root; then
     echo "Installing WordPress..."
     wp core install --path=/var/www/html \
-        --url="https://chimpansky.42.fr" \
+        --url="https://tkasbari.42.fr" \
         --title="My Inception Site" \
         --admin_user="important_user" \
         --admin_password="1" \
         --admin_email="thomas.kasbarian@gmail.com" --allow-root
-    echo "WordPress installed successfully."
+    if ! wp core is-installed --path=/var/www/html --allow-root; then
+        echo "Failed to install WordPress."
+        exit 1
+    else
+        echo "WordPress installed successfully."
+    fi
 else
     echo "WordPress already installed. Skipping installation."
 fi

@@ -45,13 +45,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/chimpansky/data/mariadb
+      device: /home/tkasbari/data/mariadb
       o: bind
   wordpress_data:
     driver: local
     driver_opts:
       type: none
-      device: /home/chimpansky/data/wordpress
+      device: /home/tkasbari/data/wordpress
       o: bind
 
 networks:

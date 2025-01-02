@@ -16,7 +16,7 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 -keyout /etc/ssl/private/inception-nginx-selfsigned.key \
 -out /etc/ssl/certs/inception-nginx-selfsigned.crt \
--subj "/C=AT/ST=Austria/L=Vienna/O=42Vienna/OU=monkey_business/CN=chimpansky/emailAddress=thomas.kasbarian@gmail.com"
+-subj "/C=AT/ST=Austria/L=Vienna/O=42Vienna/OU=monkey_business/CN=tkasbari/emailAddress=thomas.kasbarian@gmail.com"
 RUN echo "user: " ${USER}
 
 
