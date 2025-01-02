@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y \
 # COPY - copies from host to container
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
-# Copy ssl certificates to the container
-COPY conf/ssl/inception-nginx-selfsigned.crt /etc/ssl/certs/inception-nginx-selfsigned.crt
-COPY conf/ssl/inception-nginx-selfsigned.key /etc/ssl/private/inception-nginx-selfsigned.key
-
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/ssl/private/inception-nginx-selfsigned.key \
+-out /etc/ssl/certs/inception-nginx-selfsigned.crt \
+-subj "/C=AT/ST=Austria/L=Vienna/O=42Vienna/OU=monkey/CN=tkasbari/emailAddress=thomas.kasbarian@gmail.com"
 
 
 # EXPOSE - tells docker that the container listens on the specified network ports at runtime. this does not make the ports of the container accessible to the host
