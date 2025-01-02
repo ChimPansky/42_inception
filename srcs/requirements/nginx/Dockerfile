@@ -17,16 +17,17 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 -keyout /etc/ssl/private/inception-nginx-selfsigned.key \
 -out /etc/ssl/certs/inception-nginx-selfsigned.crt \
 -subj "/C=AT/ST=Austria/L=Vienna/O=42Vienna/OU=monkey_business/CN=tkasbari/emailAddress=thomas.kasbarian@gmail.com"
-RUN echo "user: " ${USER}
 
 
 # EXPOSE - tells docker that the container listens on the specified network ports at runtime. this does not make the ports of the container accessible to the host
 EXPOSE 443
 # to make nginx content reachable through custom domain edit /etc/hosts file on host machine (e.g. 127.0.0.1    tkasbari.42.fr)
 
+COPY tools/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
 # CMD - specifies what command to run at container startup
 # "nginx" - starts the nginx server
 # "-g" - allows passing nginx configuration directives
 # "daemon off;" - runs nginx in the foreground. by default, nginx runs in the background and the container would exit immediately after starting
-# ENTRYPOINT ["./entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]

@@ -1,5 +1,16 @@
 #!/bin/bash
 echo "Starting Wordpress..."
+echo "mysql_wp_database: $MYSQL_WP_DATABASE"
+echo "domain_name: "$DOMAIN_NAME
+echo "mariadb_host_name: "$MARIADB_HOST_NAME
+echo "mysql_wp_user: "$MYSQL_WP_USER
+echo "mysql_wp_pw: "$MYSQL_WP_PW
+echo "wp_admin_user: "$WP_ADMIN_USER
+echo "wp_admin_pw: "$WP_ADMIN_PW
+echo "wp_admin_email: "$WP_ADMIN_EMAIL
+echo "wp_regular_user: "$WP_REGULAR_USER
+echo "wp_regular_pw: "$WP_REGULAR_PW
+echo "wp_regular_email: "$WP_REGULAR_EMAIL
 
 # Check if WordPress is already installed
 if [ ! -f "/var/www/html/wp-config.php" ]; then
@@ -12,10 +23,10 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
     echo "Generating wp-config.php..."
     cat <<EOF > /var/www/html/wp-config.php
 <?php
-define('DB_NAME', 'wordpress');
-define('DB_USER', 'wpuser');
-define('DB_PASSWORD', 'wpuser123');
-define('DB_HOST', 'mariadb');
+define('DB_NAME', '$MYSQL_WP_DATABASE');
+define('DB_USER', '$MYSQL_WP_USER');
+define('DB_PASSWORD', '$MYSQL_WP_PW');
+define('DB_HOST', '$MARIADB_HOST_NAME');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
 define('AUTH_KEY',         '$(openssl rand -base64 32)');
@@ -47,23 +58,23 @@ fi
 if ! wp core is-installed --path=/var/www/html --allow-root; then
     echo "Installing WordPress..."
     wp core install --path=/var/www/html \
-        --url="https://tkasbari.42.fr" \
+        --url="https://$DOMAIN_NAME" \
         --title="My Inception Site" \
-        --admin_user="important_user" \
-        --admin_password="1" \
-        --admin_email="thomas.kasbarian@gmail.com" --allow-root
+        --admin_user="$WP_ADMIN_USER" \
+        --admin_password="$WP_ADMIN_PW" \
+        --admin_email="$WP_ADMIN_EMAIL" --allow-root
     if ! wp core is-installed --path=/var/www/html --allow-root; then
         echo "Failed to install WordPress."
         exit 1
     else
         echo "WordPress installed successfully."
     fi
-    echo "Creating user..."
-    wp user create tkasbari tkasbari@gmail.com --role=editor --user_pass="1" --path=/var/www/html --allow-root
+    echo "Creating regular user..."
+    wp user create $WP_REGULAR_USER $WP_REGULAR_EMAIL --role=editor --user_pass="$WP_REGULAR_PW" --path=/var/www/html --allow-root
     if [ $? -eq 0 ]; then
-        echo "User tkasbari created successfully."
+        echo "User $WP_REGULAR_USER created successfully."
     else
-        echo "Failed to create user tkasbari."
+        echo "Failed to create user $WP_REGULAR_USER."
     fi
 else
     echo "WordPress already installed. Skipping installation."

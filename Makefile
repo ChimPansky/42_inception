@@ -12,7 +12,7 @@ up:
 	docker-compose -f $(YML_FILE) up -d
 
 down:
-	docker-compose -f $(YML_FILE) down --timeout 20
+	docker-compose -f $(YML_FILE) down
 
 restart:
 	docker-compose -f $(YML_FILE) restart

@@ -9,8 +9,11 @@ RUN apt-get update && apt-get install -y \
 # Use MariaDB's entrypoint script to ensure initdb logic works
 COPY tools/init-wordpress.sql /init-wordpress.sql
 
-RUN service mariadb start && mysql < init-wordpress.sql
+# RUN service mariadb start && mysql < init-wordpress.sql
 
 EXPOSE 3306
 
-CMD ["mysqld", "--bind-address=0.0.0.0"]
+COPY tools/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["mysqld"]
