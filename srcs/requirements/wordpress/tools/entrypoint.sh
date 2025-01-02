@@ -58,6 +58,13 @@ if ! wp core is-installed --path=/var/www/html --allow-root; then
     else
         echo "WordPress installed successfully."
     fi
+    echo "Creating user..."
+    wp user create tkasbari tkasbari@gmail.com --role=editor --user_pass="1" --path=/var/www/html --allow-root
+    if [ $? -eq 0 ]; then
+        echo "User tkasbari created successfully."
+    else
+        echo "Failed to create user tkasbari."
+    fi
 else
     echo "WordPress already installed. Skipping installation."
 fi

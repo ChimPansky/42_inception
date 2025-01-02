@@ -34,10 +34,10 @@ build-wp-volume:
 	@if [ ! -d $(WP_VOLUME) ]; then \
 		echo "creating wordpress volume on host"; \
 		mkdir -p $(WP_VOLUME); \
-		sudo chown -R www-data:www-data $(WP_VOLUME); \
 	else \
 		echo "wordpress volume already exists"; \
 	fi
+#sudo chown -R www-data:www-data $(WP_VOLUME); \
 
 
 build-db-volume:
