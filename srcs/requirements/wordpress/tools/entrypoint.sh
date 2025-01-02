@@ -48,7 +48,7 @@ fi
 if ! wp core is-installed --path=/var/www/html --allow-root; then
     echo "Installing WordPress..."
     wp core install --path=/var/www/html \
-        --url="https://${DOMAIN_NAME}" \
+        --url="https://chimpansky.42.fr" \
         --title="My Inception Site" \
         --admin_user="important_user" \
         --admin_password="1" \
