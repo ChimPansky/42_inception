@@ -1,12 +1,11 @@
 
 YML_FILE = srcs/docker-compose.yml
-# IMG_NGINX = inception-nginx-image
-# IMG_FOLDER = srcs/requirements/
-# CNT_NGINX = inception-nginx-container
+WP_VOLUME = ~/data/wordpress
+DB_VOLUME = ~/data/mariadb
 
 all: build up
 
-build: wordpress-volume mariadb-volume
+build: build-volumes
 	docker-compose --verbose -f $(YML_FILE) build
 
 up:
@@ -18,32 +17,38 @@ down:
 restart:
 	docker-compose -f $(YML_FILE) restart
 
-fclean: down clear-wordpress clear-mariadb
+fclean: down clean-volumes
 	docker-compose -f $(YML_FILE) down --rmi all
 
 re: fclean all
 
 # creates a volume for wordpress
-wordpress-volume:
-	@if [ ! -d ~/data/wordpress ]; then \
+build-volumes: build-wp-volume build-db-volume
+
+clean-volumes: clean-wp-volume clean-db-volume
+
+build-wp-volume:
+	@if [ ! -d $(WP_VOLUME) ]; then \
 		echo "creating wordpress volume on host"; \
-		mkdir -p ~/data/wordpress; \
-		sudo chown -R www-data:www-data ~/data/wordpress; \
+		mkdir -p $(WP_VOLUME); \
+		sudo chown -R www-data:www-data $(WP_VOLUME); \
 	else \
 		echo "wordpress volume already exists"; \
 	fi
 
-clear-wordpress:
-	sudo rm -rf ~/data/wordpress
 
-mariadb-volume:
-	@if [ ! -d ~/data/mariadb ]; then \
+build-db-volume:
+	@if [ ! -d $(DB_VOLUME) ]; then \
 		echo "creating mariadb volume on host"; \
-		mkdir -p ~/data/mariadb; \
-		sudo chown -R mysql:mysql ~/data/mariadb; \
+		mkdir -p $(DB_VOLUME); \
+		sudo chown -R mysql:mysql $(DB_VOLUME); \
 	else \
 		echo "mariadb volume already exists"; \
 	fi
 
-clear-mariadb:
+# dont use variables here just to make sure to not accidently rm -rf something that should not be rm -rfed
+clean-wp-volume:
+	sudo rm -rf ~/data/wordpress
+
+clean-db-volume:
 	sudo rm -rf ~/data/mariadb

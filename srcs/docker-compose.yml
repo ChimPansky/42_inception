@@ -6,11 +6,9 @@ services:
     build: ./requirements/mariadb # where to find the Dockerfile to build the image
     container_name: inception-mariadb # name of the container
     image: mariadb-image # how the image will be tagged if it hasnt been built yet
-    restart: 'no' # ensures automatic restart of container in case it crashes
+    restart: always # ensures automatic restart of container in case it crashes
     volumes:
       - mariadb_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - inception-network
 
@@ -20,7 +18,7 @@ services:
     build: ./requirements/nginx
     container_name: inception-nginx
     image: nginx-image
-    restart: 'no'
+    restart: always
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
@@ -37,9 +35,7 @@ services:
     build: ./requirements/wordpress
     container_name: inception-wordpress
     image: wordpress-image
-    restart: 'no'
-    # ports:
-    #   - "9000:9000"
+    restart: always
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
       - wordpress_data:/var/www/html
