@@ -19,8 +19,6 @@ services:
     container_name: inception-nginx
     image: nginx-image
     restart: always
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
       - wordpress_data:/var/www/html
