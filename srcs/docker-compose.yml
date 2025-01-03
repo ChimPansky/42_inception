@@ -69,6 +69,18 @@ services:
     env_file:
       - .env
 
+  website:
+    build: ./requirements/bonus/website
+    container_name: inception-website
+    image: website-image
+    restart: always
+    ports:
+      - "90:90"
+    networks:
+      - inception-network
+    env_file:
+      - .env
+
 volumes:
   mariadb_data:
     driver: local
