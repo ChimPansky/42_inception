@@ -34,6 +34,7 @@ services:
   wordpress:
     depends_on:
       - mariadb
+      - redis
     build: ./requirements/wordpress
     container_name: inception-wordpress
     image: wordpress-image
@@ -41,6 +42,16 @@ services:
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
       - wordpress_data:/var/www/html
+    networks:
+      - inception-network
+    env_file:
+      - .env
+
+  redis:
+    build: ./requirements/redis
+    container_name: inception-redis
+    image: redis-image
+    restart: always
     networks:
       - inception-network
     env_file:

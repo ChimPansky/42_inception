@@ -2,8 +2,9 @@ FROM debian:bullseye
 
 RUN apt update && apt install -y \
     php php-fpm php-mysql php-curl php-mbstring php-xml php-gd php-zip \
-    curl tar mariadb-client iputils-ping && \
-    apt clean && rm -rf /var/lib/apt/lists/*
+    curl tar mariadb-client sendmail iputils-ping \
+    php-redis \
+    && apt clean && rm -rf /var/lib/apt/lists/*
 
 # to automate the installation of WordPress
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \

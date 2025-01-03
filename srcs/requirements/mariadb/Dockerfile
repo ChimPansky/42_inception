@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     mariadb-server \
     iputils-ping \
-    && rm -rf /var/lib/apt/lists/*
+    && apt clean && rm -rf /var/lib/apt/lists/*
 # mariadb-servers installs the following (among others):
     # mariadb - (ignition system of car) the service that starts up / shuts down mysqld
     # mysqld - (engine of car) the daemon that runs the MySQL server

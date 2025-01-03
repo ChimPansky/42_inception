@@ -42,6 +42,11 @@ define('WP_DEBUG', false);
 if ( !defined('ABSPATH') ) {
     define('ABSPATH', dirname(__FILE__) . '/');
 }
+define('WP_REDIS_HOST', 'redis');
+define('WP_REDIS_PORT', '$REDIS_PORT');
+define('WP_REDIS_DATABASE', 0);
+define('WP_REDIS_TIMEOUT', 1);
+define('WP_REDIS_READ_TIMEOUT', 1);
 require_once(ABSPATH . 'wp-settings.php');
 EOF
     if [ -f "/var/www/html/wp-config.php" ]; then
@@ -65,7 +70,7 @@ if ! wp core is-installed --path=/var/www/html --allow-root; then
         --admin_email="$WP_ADMIN_EMAIL" --allow-root
     if ! wp core is-installed --path=/var/www/html --allow-root; then
         echo "Failed to install WordPress."
-        exit 1
+        exit 2
     else
         echo "WordPress installed successfully."
     fi
@@ -76,6 +81,9 @@ if ! wp core is-installed --path=/var/www/html --allow-root; then
     else
         echo "Failed to create user $WP_REGULAR_USER."
     fi
+
+    wp plugin install redis-cache --activate --path=/var/www/html --allow-root
+    wp redis enable --path=/var/www/html --allow-root
 else
     echo "WordPress already installed. Skipping installation."
 fi

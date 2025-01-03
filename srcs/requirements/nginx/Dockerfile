@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     openssl \
     vim \
     iputils-ping \
-    && rm -rf /var/lib/apt/lists/*
+    && apt clean && rm -rf /var/lib/apt/lists/*
 
 # COPY - copies from host to container
 COPY conf/nginx.conf /etc/nginx/nginx.conf
