@@ -57,6 +57,21 @@ services:
     env_file:
       - .env
 
+  ftp:
+    build: ./requirements/ftp
+    container_name: inception-ftp
+    image: ftp-image
+    restart: always
+    ports:
+      - "210:21"
+      - "21000-21010:21000-21010"
+    networks:
+      - inception-network
+    volumes:
+      - wordpress_data:/var/www/html
+    env_file:
+      - .env
+
 volumes:
   mariadb_data:
     driver: local
