@@ -57,6 +57,18 @@ services:
     env_file:
       - .env
 
+  adminer:
+    build: ./requirements/adminer
+    container_name: inception-adminer
+    image: adminer-image
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - inception-network
+    env_file:
+      - .env
+
 volumes:
   mariadb_data:
     driver: local
