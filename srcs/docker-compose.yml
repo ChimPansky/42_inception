@@ -48,10 +48,30 @@ services:
       - .env
 
   redis:
-    build: ./requirements/redis
+    build: ./requirements/bonus/redis
     container_name: inception-redis
     image: redis-image
     restart: always
+    networks:
+      - inception-network
+
+  adminer:
+    build: ./requirements/bonus/adminer
+    container_name: inception-adminer
+    image: adminer-image
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - inception-network
+
+  website:
+    build: ./requirements/bonus/website
+    container_name: inception-website
+    image: website-image
+    restart: always
+    ports:
+      - "90:90"
     networks:
       - inception-network
     env_file:
@@ -71,6 +91,19 @@ services:
       - wordpress_data:/var/www/html
     env_file:
       - .env
+      
+  portainer:
+    build: ./requirements/bonus/portainer
+    container_name: inception-portainer
+    image: portainer-image
+    restart: always
+    ports:
+      - "9000:9000"
+    networks:
+      - inception-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
 
 volumes:
   mariadb_data:
@@ -85,6 +118,9 @@ volumes:
       type: none
       device: ~/data/wordpress
       o: bind
+  portainer_data:
+    driver: local
+
 
 networks:
   inception-network:
