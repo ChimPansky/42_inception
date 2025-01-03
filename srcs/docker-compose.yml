@@ -54,8 +54,6 @@ services:
     restart: always
     networks:
       - inception-network
-    env_file:
-      - .env
 
   adminer:
     build: ./requirements/bonus/adminer
@@ -66,8 +64,6 @@ services:
       - "8080:8080"
     networks:
       - inception-network
-    env_file:
-      - .env
 
   website:
     build: ./requirements/bonus/website
@@ -80,6 +76,19 @@ services:
       - inception-network
     env_file:
       - .env
+
+  portainer:
+    build: ./requirements/bonus/portainer
+    container_name: inception-portainer
+    image: portainer-image
+    restart: always
+    ports:
+      - "9000:9000"
+    networks:
+      - inception-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
 
 volumes:
   mariadb_data:
@@ -94,6 +103,9 @@ volumes:
       type: none
       device: ~/data/wordpress
       o: bind
+  portainer_data:
+    driver: local
+
 
 networks:
   inception-network:
