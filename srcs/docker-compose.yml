@@ -48,7 +48,7 @@ services:
       - .env
 
   redis:
-    build: ./requirements/redis
+    build: ./requirements/bonus/redis
     container_name: inception-redis
     image: redis-image
     restart: always
@@ -58,7 +58,7 @@ services:
       - .env
 
   adminer:
-    build: ./requirements/adminer
+    build: ./requirements/bonus/adminer
     container_name: inception-adminer
     image: adminer-image
     restart: always
