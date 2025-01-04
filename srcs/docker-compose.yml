@@ -5,7 +5,7 @@ services:
 
     build: ./requirements/mariadb # where to find the Dockerfile to build the image
     container_name: inception-mariadb # name of the container
-    image: mariadb-image # how the image will be tagged if it hasnt been built yet
+    image: mariadb-image:v1 # how the image will be tagged if it hasnt been built yet
     restart: always # ensures automatic restart of container in case it crashes
     volumes:
       - mariadb_data:/var/lib/mysql
@@ -19,7 +19,7 @@ services:
       - wordpress
     build: ./requirements/nginx
     container_name: inception-nginx
-    image: nginx-image
+    image: nginx-image:v1
     restart: always
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
@@ -37,7 +37,7 @@ services:
       - redis
     build: ./requirements/wordpress
     container_name: inception-wordpress
-    image: wordpress-image
+    image: wordpress-image:v1
     restart: always
     # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
@@ -50,7 +50,7 @@ services:
   redis:
     build: ./requirements/bonus/redis
     container_name: inception-redis
-    image: redis-image
+    image: redis-image:v1
     restart: always
     networks:
       - inception-network
@@ -58,7 +58,7 @@ services:
   adminer:
     build: ./requirements/bonus/adminer
     container_name: inception-adminer
-    image: adminer-image
+    image: adminer-image:v1
     restart: always
     ports:
       - "8080:8080"
@@ -68,7 +68,7 @@ services:
   website:
     build: ./requirements/bonus/website
     container_name: inception-website
-    image: website-image
+    image: website-image:v1
     restart: always
     ports:
       - "90:90"
@@ -80,7 +80,7 @@ services:
   portainer:
     build: ./requirements/bonus/portainer
     container_name: inception-portainer
-    image: portainer-image
+    image: portainer-image:v1
     restart: always
     ports:
       - "9000:9000"
