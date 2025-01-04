@@ -1,14 +1,11 @@
 #!/bin/bash
 echo "Starting vsftpd..."
 
-# Create FTP user if not exists
-if ! id "$FTP_USER" >/dev/null 2>&1; then
-    echo "Creating FTP user $FTP_USER..."
-    useradd -m -d /var/www/html $FTP_USER
-fi
-echo "$FTP_USER:$FTP_USER_PW" | chpasswd
-chown $FTP_USER:$FTP_USER -R /var/www/html
-echo "$FTP_USER" >> /etc/vsftpd.userlist
-echo "User $FTP_USER added to vsftpd.userlist"
+echo "changing shell to bash for www-data"
+chsh -s /bin/bash www-data
+echo "changing password for www-data"
+echo "www-data:$FTP_USER_PW" | chpasswd
+echo "www-data user added to vsftpd.userlist for FTP login."
+echo "www-data" >> /etc/vsftpd.userlist
 
 exec "$@"
