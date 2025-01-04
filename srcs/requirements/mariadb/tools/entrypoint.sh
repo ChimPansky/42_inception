@@ -1,10 +1,6 @@
 #!/bin/bash
 echo "Starting Mariadb..."
 
-# echo "Updating bind-address to 0.0.0.0..."
-# sed -i 's/bind-address\s*=.*/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
-
-echo "WP_DATABASE: ${MYSQL_WP_DATABASE}"
 if [ -z "${MYSQL_WP_DATABASE}" ]; then
     echo "No WP-Database specified. Exiting..."
     exit 1
@@ -12,9 +8,7 @@ fi
 
 if [ ! -d "/var/lib/mysql/${MYSQL_WP_DATABASE}" ]; then
     echo "Initializing Wordpress Database..."
-    # service mariadb start
 
-    # Start MariaDB safely
     echo "Starting MariaDB..."
     mysqld_safe --datadir=/var/lib/mysql &
 
@@ -49,7 +43,5 @@ if [ ! -d "/var/lib/mysql/${MYSQL_WP_DATABASE}" ]; then
 else
     echo "Wordpress Database already exists.";
 fi
-
-
 
 exec "$@"

@@ -1,8 +1,0 @@
-CREATE DATABASE IF NOT EXISTS wordpress;
-
-CREATE USER IF NOT EXISTS 'wpuser'@'%' IDENTIFIED BY 'wpuser123';
-GRANT ALL PRIVILEGES ON wordpress.* TO 'wpuser'@'%';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
-
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'inception';
-FLUSH PRIVILEGES;

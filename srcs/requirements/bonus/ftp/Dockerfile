@@ -15,4 +15,3 @@ EXPOSE 21 21000-21010
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["vsftpd", "/etc/vsftpd.conf"]
-# CMD ["sleep", "infinity"]

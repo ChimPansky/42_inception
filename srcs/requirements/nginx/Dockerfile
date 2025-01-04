@@ -21,7 +21,6 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 # EXPOSE - tells docker that the container listens on the specified network ports at runtime. this does not make the ports of the container accessible to the host
 EXPOSE 443
-# to make nginx content reachable through custom domain edit /etc/hosts file on host machine (e.g. 127.0.0.1    tkasbari.42.fr)
 
 COPY tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

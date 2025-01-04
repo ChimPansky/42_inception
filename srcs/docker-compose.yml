@@ -2,16 +2,15 @@
 services:
   # each container has a name which can be referenced in other containers
   mariadb:
-
     build: ./requirements/mariadb # where to find the Dockerfile to build the image
     container_name: inception-mariadb # name of the container
-    image: mariadb-image:v1 # how the image will be tagged if it hasnt been built yet
+    image: mariadb:v1 # how the image will be tagged if it hasnt been built yet
     restart: always # ensures automatic restart of container in case it crashes
-    volumes:
+    volumes:  # which volume to mount to the container (see volumes section below)
       - mariadb_data:/var/lib/mysql
-    networks:
+    networks: # which network to connect to
       - inception-network
-    env_file:
+    env_file: # which environment file to use
       - .env
 
   nginx:
@@ -19,9 +18,8 @@ services:
       - wordpress
     build: ./requirements/nginx
     container_name: inception-nginx
-    image: nginx-image:v1
+    image: nginx:v1
     restart: always
-    # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
       - wordpress_data:/var/www/html
     ports:
@@ -37,9 +35,8 @@ services:
       - redis
     build: ./requirements/wordpress
     container_name: inception-wordpress
-    image: wordpress-image:v1
+    image: wordpress:v1
     restart: always
-    # make sure the volume path exists and has the right permissions on the host machine (user www-data)
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -47,10 +44,11 @@ services:
     env_file:
       - .env
 
+# bonus services:
   redis:
     build: ./requirements/bonus/redis
     container_name: inception-redis
-    image: redis-image:v1
+    image: redis:v1
     restart: always
     networks:
       - inception-network
@@ -58,7 +56,7 @@ services:
   adminer:
     build: ./requirements/bonus/adminer
     container_name: inception-adminer
-    image: adminer-image:v1
+    image: adminer:v1
     restart: always
     ports:
       - "8080:8080"
@@ -68,7 +66,7 @@ services:
   website:
     build: ./requirements/bonus/website
     container_name: inception-website
-    image: website-image:v1
+    image: website:v1
     restart: always
     ports:
       - "90:90"
@@ -78,9 +76,9 @@ services:
       - .env
 
   ftp:
-    build: ./requirements/ftp
+    build: ./requirements/bonus/ftp
     container_name: inception-ftp
-    image: ftp-image:v1
+    image: ftp:v1
     restart: always
     ports:
       - "210:21"
@@ -95,7 +93,7 @@ services:
   portainer:
     build: ./requirements/bonus/portainer
     container_name: inception-portainer
-    image: portainer-image:v1
+    image: portainer:v1
     restart: always
     ports:
       - "9000:9000"
@@ -105,23 +103,27 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
 
+# for volumes that are bound to a host directory:make sure the volume path exists
 volumes:
   mariadb_data:
+    name: mariadb_data
     driver: local
     driver_opts:
       type: none
       device: ~/data/mariadb
       o: bind
   wordpress_data:
+    name: wordpress_data
     driver: local
     driver_opts:
       type: none
       device: ~/data/wordpress
       o: bind
   portainer_data:
+    name: portainer_data
     driver: local
-
 
 networks:
   inception-network:
+    name: inception-network
     driver: bridge

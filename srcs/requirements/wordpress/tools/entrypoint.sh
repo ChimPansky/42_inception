@@ -1,16 +1,5 @@
 #!/bin/bash
 echo "Starting Wordpress..."
-echo "mysql_wp_database: $MYSQL_WP_DATABASE"
-echo "domain_name: "$DOMAIN_NAME
-echo "mariadb_host_name: "$MARIADB_HOST_NAME
-echo "mysql_wp_user: "$MYSQL_WP_USER
-echo "mysql_wp_pw: "$MYSQL_WP_PW
-echo "wp_admin_user: "$WP_ADMIN_USER
-echo "wp_admin_pw: "$WP_ADMIN_PW
-echo "wp_admin_email: "$WP_ADMIN_EMAIL
-echo "wp_regular_user: "$WP_REGULAR_USER
-echo "wp_regular_pw: "$WP_REGULAR_PW
-echo "wp_regular_email: "$WP_REGULAR_EMAIL
 
 # Check if WordPress is already installed
 if [ ! -f "/var/www/html/wp-config.php" ]; then
@@ -74,14 +63,13 @@ if ! wp core is-installed --path=/var/www/html --allow-root; then
     else
         echo "WordPress installed successfully."
     fi
-    echo "Creating regular user..."
+    echo "Creating regular user $WP_REGULAR_USER..."
     wp user create $WP_REGULAR_USER $WP_REGULAR_EMAIL --role=editor --user_pass="$WP_REGULAR_PW" --path=/var/www/html --allow-root
     if [ $? -eq 0 ]; then
         echo "User $WP_REGULAR_USER created successfully."
     else
         echo "Failed to create user $WP_REGULAR_USER."
     fi
-
     wp plugin install redis-cache --activate --path=/var/www/html --allow-root
     wp redis enable --path=/var/www/html --allow-root
 else
@@ -91,4 +79,4 @@ fi
 # echo "Setting permissions for wordpress..."
 chown -R www-data:www-data /var/www/html
 
-exec "$@" # Important for making the container run as PID 1
+exec "$@"

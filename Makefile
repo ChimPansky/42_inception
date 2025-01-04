@@ -1,4 +1,3 @@
-
 YML_FILE = srcs/docker-compose.yml
 WP_VOLUME = ~/data/wordpress
 DB_VOLUME = ~/data/mariadb
@@ -13,32 +12,22 @@ up:
 	docker-compose -f $(YML_FILE) up -d
 
 down:
-	docker-compose -f $(YML_FILE) down
+	docker-compose -f $(YML_FILE) down --timeout 5
 
 restart:
-	docker-compose -f $(YML_FILE) restart
+	docker-compose -f $(YML_FILE) restart --timeout 5
 
-fclean: down clean-images clean-volumes
-	docker-compose -f $(YML_FILE) down --rmi all
+fclean:  clean-images
 
 re: fclean all
 
 clean-images:
-	docker-compose -f $(YML_FILE) down --rmi all
-
-# Check and add host entry if needed
-check-hosts:
-	@if ! grep -q "^$(HOST_ENTRY)" /etc/hosts; then \
-		echo "Adding $(HOST_ENTRY) to /etc/hosts"; \
-		echo -e "$(HOST_ENTRY)" | sudo tee -a /etc/hosts; \
-	else \
-		echo "Host entry already exists in /etc/hosts"; \
-	fi
-
-# creates a volume for wordpress
-build-volumes: build-wp-volume build-db-volume
+	docker-compose -f $(YML_FILE) down --timeout 5 --rmi all
 
 clean-volumes: clean-wp-volume clean-db-volume
+	docker-compose -f $(YML_FILE) down --timeout 5 --volumes
+
+build-volumes: build-wp-volume build-db-volume
 
 build-wp-volume:
 	@if [ ! -d $(WP_VOLUME) ]; then \
@@ -64,3 +53,11 @@ clean-wp-volume:
 
 clean-db-volume:
 	sudo rm -rf ~/data/mariadb
+
+check-hosts:
+	@if ! grep -q "^$(HOST_ENTRY)" /etc/hosts; then \
+		echo "Adding $(HOST_ENTRY) to /etc/hosts"; \
+		echo -e "$(HOST_ENTRY)" | sudo tee -a /etc/hosts; \
+	else \
+		echo "Host entry already exists in /etc/hosts"; \
+	fi
