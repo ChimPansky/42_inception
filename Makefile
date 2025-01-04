@@ -2,10 +2,11 @@
 YML_FILE = srcs/docker-compose.yml
 WP_VOLUME = ~/data/wordpress
 DB_VOLUME = ~/data/mariadb
+HOST_ENTRY = 127.0.0.1\ttkasbari.42.fr
 
 all: build up
 
-build: build-volumes
+build: build-volumes check-hosts
 	docker-compose --verbose -f $(YML_FILE) build
 
 up:
@@ -25,6 +26,15 @@ re: fclean all
 clean-images:
 	docker-compose -f $(YML_FILE) down --rmi all
 
+# Check and add host entry if needed
+check-hosts:
+	@if ! grep -q "^$(HOST_ENTRY)" /etc/hosts; then \
+		echo "Adding $(HOST_ENTRY) to /etc/hosts"; \
+		echo -e "$(HOST_ENTRY)" | sudo tee -a /etc/hosts; \
+	else \
+		echo "Host entry already exists in /etc/hosts"; \
+	fi
+
 # creates a volume for wordpress
 build-volumes: build-wp-volume build-db-volume
 
@@ -37,8 +47,6 @@ build-wp-volume:
 	else \
 		echo "wordpress volume already exists"; \
 	fi
-#sudo chown -R www-data:www-data $(WP_VOLUME); \
-
 
 build-db-volume:
 	@if [ ! -d $(DB_VOLUME) ]; then \
@@ -49,6 +57,8 @@ build-db-volume:
 	fi
 
 # dont use variables here just to make sure to not accidently rm -rf something that should not be rm -rfed
+# need sudo because we are using volumes that are bound to the host and the containers using
+# these volumes are changing permissions of the files in the volumes
 clean-wp-volume:
 	sudo rm -rf ~/data/wordpress
 
